@@ -27,15 +27,15 @@ model.add(Dense(40))
 model.add(Dense(1))
 
 #3. 훈련
-model.compile(loss = 'mse', optimizer = 'adam', metrics=['acc']) # acc분류 지표 따라서 오차가 발생함에도 acc 1이 나옴
-model.fit(x_train,y_train, epochs=10000, batch_size=1)
+model.compile(loss = 'mse', optimizer = 'adam', metrics=['mse']) # acc분류 지표 따라서 오차가 발생함에도 acc 1이 나옴
+model.fit(x_train,y_train, epochs=2000, batch_size=1)
 
 #4. 평가,예측
-loss, acc = model.evaluate(x_test,y_test,batch_size=1)
+loss, mse = model.evaluate(x_test,y_test,batch_size=1)
 # 이미 훈련한 데이터로 평가를 할 때 다시 같은 데이터를 입력하게 되면 당연한 결과값이 나옴 (이미 결과값을 알고 있음)
 
 print ("loss : ", loss)
-print ("acc : ", acc)
+print ("mse : ", mse)
 
 
 
