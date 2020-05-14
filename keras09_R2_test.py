@@ -15,18 +15,19 @@ from keras.layers import Dense #DNN구조에 가장 기본이 되는 Dense layer
 
 model = Sequential()
 
-model.add(Dense(100, input_dim = 1, activation= 'sigmoid'))
+model.add(Dense(100, input_dim = 1))
+model.add(Dense(1000))
+model.add(Dense(2000))
+model.add(Dense(2000))
+model.add(Dense(1000))
+model.add(Dense(1000))
+model.add(Dense(1000))
 model.add(Dense(100))
-model.add(Dense(200))
-model.add(Dense(200))
-model.add(Dense(100))
-model.add(Dense(100))
-
 model.add(Dense(1))
 
 #3. 훈련
 model.compile(loss = 'mse', optimizer = 'adam', metrics=['mse']) # acc분류 지표 따라서 오차가 발생함에도 acc 1이 나옴
-model.fit(x_train,y_train, epochs=810, batch_size=1)
+model.fit(x_train,y_train, epochs=100000, batch_size=1)
 #epochs를 2000으로 fit을 했을 때 중간에 loss가 감소하다가 증가하는 구간이 발생 why?
 #4. 평가,예측
 loss, mse = model.evaluate(x_test,y_test,batch_size=1)
