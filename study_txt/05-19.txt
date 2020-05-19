@@ -1,0 +1,35 @@
+y_predict = model1.predict([x1_test, x2_test]) # 20by3=>test 2개
+=> 여기서 output의 갯수만큼 predict값이 리턴 된다. 따라서 output의 갯수만큼 y_predict 변수를 만들어줘야함
+
+EarlyStopping은 과적화구간에 들어가는 지점임은 분명하다 따라서 그 과적화구간에 들어가기전에 짜르는게 좋기 때문에
+수정을 통해서 epoch를 구해준다 ( 단, 노드가 최적화가 완료되었다는 가정하에)
+
+
+ #DNN구조에 가장 기본이 되는 Dense layer , Input layer => 함수형
+
+
+#부동 소수점에서의 속도가 빠름 but 같은 형태 타입의 데이터만 사용가능 
+
+
+
+print(a[3:9]) #index 3~9까지에서 3, 9 제외
+print(a[3:-5]) # => 마지막꺼 제외 => a[-5] = r
+print(a[:-1]) # 처음부터 a[=1] 까지
+print(a[1:]) # a[1]부터 마지막까지
+
+
+a.append(4)
+print(a)
+# a = a.append(5)
+# print(a)          # Error : None이 return됨.
+
+
+a.insert(0, 7.1)    # insert(삽입할 자리, 삽입할 숫자)
+print(a)    # [7.1, 4, 3, 2, 1]
+
+
+
+
+#05-19 할 일
+
+
