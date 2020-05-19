@@ -1,0 +1,61 @@
+batch_size의 default값이 32이다. 데이터 갯수보다 크다면 데이터 Max갯수만큼 잡힘
+
+model = Sequential() => Sequential() 클래스를 모델로 대체해서 사용
+model.add(Dense(1))  => Sequential() 안에 있는 add라는 기능을 사용해서 layers 클래스 안에 Dense라는 클래스를 추가
+
+model.compile => Sequential() 안에 compile를 사용 컴퓨터가 알아먹을 수 있게
+
+model.fit => fit -> 피트니스센터, 훈련
+
+model.fit(x_train,y_train, epochs=100, batch_size=1,validation_data=(x_train,y_train))
+=> 데이터는 x_train과 y_train을 사용하겠다. epochs => 전체 훈련량 100번
+
+model.add(Dense(1000000))
+model.add(Dense(1000000))
+=> CPU에서는 안돌아감   //GPU에서는 메모리 + CORE가 많은게 좋음
+
+* 단축키
+shift + del 한줄 삭제
+
+#회귀방식 
+MSE => 평균제곱 오차, // 이걸 쓰는 이유는 실제 측정값과 예측값의 차이를 설명할 수 없다. 예측값은 예측가능하나
+실제 측정값이  거기에 있는 이유를 설명할 순 없다. 이는 이 설명이 불가능한 영역을 오차로 계산하게 된다 
+1/n∑(실제 값 - 예측 값)^2  => 제곱하는 이유는 오차가 상황에 따라 양수 혹은 음수가 되기 때문에 제곱하여 합을 구함
+하지만 그렇게 되면 값이 너무 커지기 때문에 정말 오차가 크다고 생각하는 오류를 범함 따라서 자유도로 나눔으로써 
+평균값을 구할 수 있게 됨
+
+
+
+#분류방식 => matrics=[ 'acc' ]
+0, 1 
+결과값에 대한 분류가 정해져 있어야 함 ex) 남자, 여자 // 강아지, 고양이 // 자동차, 오토바이
+
+
+데이터 분할에서 train 과 test값을 나눠서하는 이유는 좀 더 괜찮은 예측값을 구하기 위해서
+
+RMSE (Root Mean Squared Error)
+MSE에다가 Root를 씌운 결과이다.  공식의 결과를 보면  √[(1/n)∑{(실제 값 - 예측 값)^2}] 이 결과는 표준편차와 공식이 같다
+
+RMSE의 의미는 통계학에서 표준편차의 의미, 즉 예상한 값과 실제 실험/관측 결과가 평균적으로 얼마만큼 떨어졌는가 하는
+ 것과 유사한 것으로 이해하면 된다. 엄밀하게 말하면, 보통 발생하는 오차는 정규분포를 따른다고 가정하는데 
+68%의 실험/관측 결과는 RMSE보다 큰 오차를 가지지 않을 것이고, 95%의 실험/관측 결과는 RMSE의 2배 보다는 
+작은 오차를 가진다는 의미입니다.  그런데 때떄로 평균 제곱 오차는 그 값이 너무 커서 계산 속도가 느려질 수 있으므로 
+불편하다. 그래서 여기에 다시 제곱근을 씌운 것이 평균 제곱근 오차(root mean squared error, RMSE)
+이제 우리가 하는 작업은 RMSE의 계산 결과가 가장 작은 선을 찾는 것이라 할 수 있다.
+즉, 선형회귀란 임의의 직선을 그어 이에 대한 RMSE를 구하고, 이 값을 가장 작게 만들어주는 a, b 값을 찾아가는 작업이 된다.
+
+from sklearn.metrics import mean_squared_error #RMSE 함수화 => 캐글 및 대회에서 정확도 지수로 많이 사용
+def RMSE(y_test, y_predict):
+    return np.sqrt(mean_squared_error(y_test,y_predict))
+print("RMSE : ", RMSE(y_test, y_predict))
+
+
+
+R2 
+
+R^2 = ∑( 예측값에 대한 편차^2) / ∑ ( 편차^2 ) 
+
+표본 집단에서의 예측값에 대한 편차 / 모 집단에서의 예측값에 대한 편차
+
+
+
