@@ -1,0 +1,16 @@
+num_params = [(num_units + input_dim + 1) * num_units] * 4
+
+num_units + input_dim: concat [h(t-1), x(t)]
++ 1: bias
+* 4: there are 4 neural network layers (yellow box) {W_forget, W_input, W_output, W_cell}
+
+PS: num_units = num_hidden_units = output_dim
+
+========================== 설명 ========================
+(num_units + input_dim + 1)
+output_dim + input_dim(feature) 시계열 특성상 피쳐라고 하겠다. 그 이유는 얼만큼의 데이터를 잘라서 모델링을 결정하는
+인자이기 때문 (+1 => bias)
+num_units = output_dim의 경우는 피드백을 받는 모델이기 때문에 output_dim을 그대로 가져옴
+그리고 * num_units의 경우 layer이기 때문에 input_dim * outputdim의 결과를 만들어주기 위해 곱 연산을 함
+마지막으로 *4의 연산의 경우에는 4개의 뉴럴레이어의 계산 ( 시그모이드와 하이퍼탄젠트 ) 이 적용돼서 *4를 해줌 
+=> 여기서 각각의 layer를 만날때 w값을 새로 갱신해주는데 그것을 4번해주기 때문에 4를 곱해줌

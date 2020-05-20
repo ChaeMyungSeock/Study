@@ -1,0 +1,72 @@
+https://art28.github.io/blog/linear-algebra-1/
+
+http://taewan.kim/post/numpy_sum_axis/
+
+from numpy import array
+from keras.models import Sequential
+from keras.layers import Dense, LSTM
+
+#1. 데이터
+x = array([[1,2,3],[2,3,4], [3,4,5],[4,5,6]])
+y = array([4,5,6,7])
+
+print("x.shape", x.shape)   #(4 , 3)
+print("y.shape", y.shape)   #(4 , )  
+
+스칼라 벡터 행렬 텐서
+
+스칼라 : 데이터를 가진 하나의 점이라고 생각
+스칼라는 하나의 숫자만으로 이루어진 데이터를 의미합니다. 스칼라는 보통 x 와 같이 알파벳 소문자로 표기하며 
+실수(real number)인 숫자 중의 하나이므로 실수 집합 “R“의 원소라는 의미에서 다음과 같이 표기한다.
+
+x ∈ R
+
+벡터 : 데이터를 지닌 x, y, z축 점들이 모인 1차원의 하나의 축이라고 생각하면 된다.
+
+벡터는 여러 숫자가 순서대로 모여 있는 것으로, 일반적인 일차원 배열이 벡터입니다.
+
+	x = 
+	      ⎢ x1 ⎤
+   	      ⎢ x2 ⎥
+    	      ⎢ x3 ⎥
+    	      ⎣ x4 ⎦
+     x ∈ R^4
+
+행렬 : 2차원의 행렬로써 (x,y평면), (z,y평면), (x,z평면) 이라고 생각하자
+
+행렬은 복수의 차원을 가지는 데이터가 다시 여러 개 있는 경우의 데이터를 합쳐서 표기한 것이다. 
+일반적으로 2차원 배열이 행렬입니다. 특히 3차원 이상 배열은 텐서(tensor)라고 합니다.
+
+
+
+텐서 : 다차원의 행렬로써 3차원이상의 배열
+
+벡터에 <그림 1>을 적용해 보면, 벡터는 x 축만을 갖는 자료형입니다. 1차원 배열에 해당하는 벡터의 각 요소(Element)는 그 자체가 Row입니다.
+
+2차원 배열 형태의 행렬(matrix)은 x축의 행과 y축의 컬럼을 갖습니다. 2차원 배열 행렬은 depth가 1이라고 생각할 수 있습니다.1
+
+3차원 배열 형태의 Tensor는 행과 열을 갖고 각 컬럼은 벡터 형태를 갖습니다. 이러한 벡터를 Depth로 표현합니다.
+
+4차원 이상의 배열은 z축의 depth 요소가 스칼라가 아니라 벡터 이상의 자료형을 갖는 것을 의미합니다. 이러한 방식으로 데이터의 Dimension(차원)은 끝없이 확장될 수 있습니다.
+
+
+x = array([[1,2,3],[2,3,4], [3,4,5],[4,5,6]])
+y = array([4,5,6,7])
+y2 = array([[4,5,6,7]])     #(1 , 4)
+y3 = array([[4], [5], [6], [7]])   #(4,1)
+print("x.shape", x.shape)   #(4 , 3)
+print("y.shape", y.shape)   #(4 , ) 스칼라가 4개 input_dim = 1 => 1차원
+print("y2.shape", y2.shape) #(1 , 4) 칼럼이 4개
+print("y3.shape", y3.shape) #(4 , 1) 칼럼이 1개
+
+
+x = x.reshape(x.shape[0], x.shape[1],1)
+# x = x.reshape(4,3,1)
+
+LSTM
+num_params = [(num_units + input_dim + 1) * num_units] * 4
+
+여기서의 input_dim이란 feature를 뜻한다. dim의 역활이 몇개의 데이터를 짤라서 사용할것인가에대한 결정
+
+
+
