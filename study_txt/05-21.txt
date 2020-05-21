@@ -1,0 +1,15 @@
+역전파, 자기 회귀 
+
+순차적으로 계산, 
+
+강화학습은 물리적으로 한계 => 나중에 책 달라해서 해보자
+
+
+                      행,         열,       몇개씩 자르는지
+x의 shape = (batch_size, timestep, feature)
+
+
+model.add(LSTM(30, input_length = 3, input_dim = 1))
+
+input_shape = ( 3 (input_length) , 2 (input_dim) )
+

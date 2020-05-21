@@ -1,0 +1,23 @@
+based ; (input_dim * output) + (bias * output) + (output ^ 2)
+
+1. * 1 -> Simple RNN
+2. * 3 -> GRU
+3. * 4 -> LSTM
+
+앞서 배운 신경망들은 전부 은닉층에서 활성화 함수를 지난 값은 오직 출력층 방향으로만 향했습니다. 
+이와 같은 신경망들을 피드 포워드 신경망(Feed Forward Neural Network)이라고 합니다. 그런데 그렇지 않은 신경망들이 
+있습니다. RNN(Recurrent Neural Network) 또한 그 중 하나입니다. RNN은 은닉층의 노드에서 활성화 함수를 통해 나온 
+결과값을 출력층 방향으로도 보내면서, 다시 은닉층 노드의 다음 계산의 입력으로 보내는 특징을 갖고있습니다.
+
+따라서 RNN => (input_dim + ouput + bias) * output
+
+
+LSTM은 4 * (input_dim + ouput + bias) * output 인 이유는 저번에도 말했듯이 hidden layer 단에서
+sigmoid 활성화 함수 3개와 tanh 하이퍼탄젠트 활성화 함수 1개로 가중치 갱신이 일어남으로 그에 따라서 
+Dense(1 , activation = 'simoid')가 3개 Dense(1 , activation = 'tanh') 1개로 병렬 연결이 되어있다고 생각하면 편하다
+
+
+GRU는 3 * (input_dim + ouput + bias) * output 인 이유는 구조상으로 sigmoid2개 하이퍼탄젠트가 1개이기 때문에
+ hidden layer 단에서 sigmoid 활성화 함수 2개와 tanh 하이퍼탄젠트 활성화 함수 1개로 가중치 갱신이 일어남으로 
+그에 따라서 Dense(1 , activation = 'simoid')가 2개 Dense(1 , activation = 'tanh') 1개로 병렬 연결이 되어있다고 생각하면
+ 편하다
