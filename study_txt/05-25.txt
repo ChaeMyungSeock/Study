@@ -1,0 +1,61 @@
+7시에  오늘까지한거 다 했는지 확인
+
+
+a = np.array(range(1,11))  	# a를 numpy array배열로 1~10까지 할당
+print(a)
+size = 5                    # time_steps = 5
+
+def split_x (x_list, size):		# split_x함수를 선언 (x_list, size) => 인수를 x_list(naddary)와 size(int)로 받겠다.
+    x_list = []			# x_list =[] => x_list를 리스트로 선언
+    for i in range(len(a) - size +1 ):	# i => 0부터 10-5+1 = 6까지 반복
+        xset = a[i:size+i]		# xset에 a[i] 부터 a[i+size-1]까지 할당
+        x_list.append(xset)		# x_list에 xset(a[i] 부터 a[i+size-1]까지) 하나씩 넣어줌
+    return np.array(x_list)		# x_list를 array형태로 리턴
+
+dataset = split_x(a, size)      #(6,5)
+print(dataset)
+[[ 1  2  3  4  5]
+ [ 2  3  4  5  6]
+ [ 3  4  5  6  7]
+ [ 4  5  6  7  8]
+ [ 5  6  7  8  9]
+ [ 6  7  8  9 10]]
+
+x1 = dataset[:, 0:4]		# 모든 행의 0~3열
+y1 = dataset[:, 4]		# 모든 행의 4열
+
+
+data에서 data 영역 [train validation test] data영역 밖 => predict
+data에서 train은 훈련하기 위함 validation은 모델의 적합성을 판단하기 위함
+test는 predict을 예측하기위해 테스트하기 위함
+
+x1_train,x1_predict ,y1_train, y1_predict = train_test_split(x1, y1,shuffle = True, train_size=90/96, random_state = 66 )
+=> 소주점으로 test_size =0.625라고 할 경우 정확하게 딱 덜어지지 않음 그럴경우 데이터도 float형으로 써줘야 데이터가
+잘림
+
+
+from keras.models import load_model
+model1 = load_model('./model/save_keras44.h5')
+model1.add(Dense(10,name = 'a'))
+모델을 저장해서 데이터를 불러올 경우 default로 저장이 되는 Dense이름에 의해 충돌이 일어난다 따라서 layer를 추가해주기
+위해서는 layer에 이름을 지정해줘야 한다.
+
+
+model1.compile(optimizer = 'adam', loss = 'mse', metrics=['acc'])
+hist = model1.fit(x1, y1, validation_split = 0.2, epochs=100, callbacks=[earlystopping], batch_size=1, verbose=1)
+import matplotlib.pyplot as plt
+plt.plot(hist.history['acc'])
+plt.plot(hist.history['val_acc'])
+plt.plot(hist.history['loss'])
+plt.plot(hist.history['val_loss'])
+
+hist에 model1의 모델 훈련결과를 넣어준다. val_loss, val_acc, acc, loss가 반환되는데 matplotlib의 pyplot를 활용하여
+그래프를 그려줄 수 있다. 그리고 histroy를 활용하여 하나씩 그려줌
+
+
+from keras.callbacks import TensorBoard
+tb_hist = TensorBoard(log_dir ='graph', histogram_freq=0, write_grads=True, write_images=True )
+
+
+[cmd 창에서] [tensorboard --logdir=.]					텐서보드가 포함된 파일에서 텐서보드 웹서버 실행(상대경로)
+[cmd 창에서] [tensorboard --logdir=텐서보드 파일있는 절대경로]		텐서보드 웹서버 실행(절대경로)
