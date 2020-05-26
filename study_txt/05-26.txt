@@ -1,0 +1,39 @@
+크로스 엔트로피(Cross-Entropy) 형태의 오차함수를 사용하면 출력 레이어에서 활성화 함수의 
+도함수에 의한 영향을 제거할 수 있다.
+
+그렇다면 역전파에 대해서  추가적인 영향력을 없애는 것인가 아니
+
+# softmax 다중분류 변화치에 따른 가중치 부여
+# adam -> sigmoid, 시그모이드를 쓰는 이유는 0 or 1을 반환해줌
+# 이진분류에서 사용하는 loss는 binary_crossentropy
+
+
+특성을 추출이기때문에 고차원에서의 계산 하지만 너무 많은 고차원의 특징을 추출해서 모델링하게 되면
+원래의 맵핑을 특성을 잃게 될 수도 있음
+
+특징, 특성을 추출함 => 겹치는 부분이 발생 => 특성, 특징이 증폭 됨 => but edge는 그만큼 data 상대적 손실
+=> edge를 제외한 모든 데이터는 데이터 학습이 잘 됨, but edge는 거의 안됨 => padding = same
+바깥쪽에 0데이터를 둘러싸서 상대적 손실이 발생해도 상관이 없는 data를 사용함으로 써 다음 layer에 같은
+크기의 data(이미지등)를 넘겨줌
+
+
+
+y = np_utils.to_categorical(y)
+
+Utils(keras) to_categorical
+keras.utils.np_utils.to_categorical(y, num_classes=None)
+
+클래스 벡터(정수들)를 바이너리 클래스 매트릭스로 변환한다.
+
+예를들어, categorical_crossentroy  와 함께 사용함
+
+파라미터
+	y: 매트릭스로 변환될 클래스 백터(정수는 0~num_classes)
+	num_classes: 총 클래스 수
+출력
+
+	입력값에 대한 바이너리 행렬
+
+
+Maxpooling 
+

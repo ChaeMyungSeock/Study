@@ -1,0 +1,48 @@
+1. 과제 
+
+print(y_predict)
+print(y_predict.shape)
+y_predict = y_predict.reshape(y_predict.shape[0])
+print(y_predict.shape)
+
+
+for i in range(len(y_predict)):
+    y_predict[i] = round(y_predict[i])
+
+print(y_predict)
+
+
+loss : 0.6858448147773742
+acc : 0.5
+[[0.53195626]
+ [0.52266353]
+ [0.51424986]]
+(3, 1)
+(3,)
+[1. 1. 1.]
+
+
+2. 과제
+y = y[:,1:6]
+print(y.shape)
+print(y)
+
+x_pre = np.array([1,2,3,4,5])
+y_predict = model.predict(x_pre, batch_size=1)
+print(y_predict)
+
+y_predict = np.argmax(y_predict,axis=1) + 1
+
+print(y_predict)
+
+loss : 1.6929808139801026
+acc : 0.20000000298023224
+[[0.32035157 0.21981746 0.16464573 0.1599667  0.13521849]
+ [0.2914904  0.22761917 0.19070467 0.15192974 0.13825606]
+ [0.2612158  0.2317824  0.22345039 0.1417494  0.14180204]
+ [0.23404069 0.23397563 0.25858986 0.13020736 0.1431864 ]
+ [0.21037655 0.23495506 0.29589468 0.11704294 0.14173077]]
+[1 1 1 3 3]
+
+3. model.add(Conv2D(7, (3,3)))
+[ { inputdim * (kernel_x * kernel_y) } + bias ] * output_dim
