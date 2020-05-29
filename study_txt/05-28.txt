@@ -2,6 +2,15 @@
 그래디언트 => 미분값 즉, 기울기가 0에 가까워지기 때문에 역전파의 소실이 발생한다 이에 따라서 
 loss = 'binary_crossentropy'를 사용해서 그래디언트의 영향력을 소실시켜서 역전파의 소실을 막는다
 
+binary_crossentropy => 2개를 시그모이드 함수로 판단하고 있을 때
+
+catagorical_crossentropy => 여러개를 softmax 함수로 판단하고 있을 때
+
+crossentropy라는 기본 함수를 공유하고 있다. 단지 그 함수에 2가 들어갔는지 n이 들어갔는지 인데
+이걸 여러개를 분류에서 binary를 사용하게 되면 임의적으로 두개의 영역으로 나눠서 판단하기 때문에
+acc가 올라가는 기형상이 발생 하지만 predict는 acc와 일치하지 않음. 따라서 crossentropy를 사용해야
+정확한 predict를 구할 수 있다.
+
 
 
 acc :  0.9576868414878845
