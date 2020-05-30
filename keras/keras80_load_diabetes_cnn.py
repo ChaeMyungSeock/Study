@@ -6,9 +6,9 @@ from keras.layers import Flatten, MaxPooling2D, Dropout
 import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
 import numpy as np
-
+import pandas as pd
 '''
 # data      : x 값
 # target    : y 값
@@ -19,47 +19,65 @@ dataset = load_diabetes()
 x = dataset.data
 y = dataset.target
 
+df = pd.DataFrame(x, columns = dataset.feature_names)
+df['traget'] = y
+print(df.head())
+print(x)
+# print(y)
 print(x.shape)
 print(y.shape)
 
-print(x)
 print(y)
 
-'''
 scaler = StandardScaler()
 x = scaler.fit_transform(x)
 
-pca = PCA(n_components=3)
+pca = PCA(n_components=8)
 pca.fit(x)
 x = pca.transform(x)
 
-x_train, x_test, y_train, y_test = train_test_split(x,y,random_state = 66, shuffle = True, test_size = 0.2)
+x_train, x_test, y_train, y_test = train_test_split(x,y,random_state = 30, shuffle = True, test_size = 0.2)
+
+
 
 # y_train = np_utils.to_categorical(y_train)
 # y_test = np_utils.to_categorical(y_test)
 print(x_train.shape)
 print(y_train.shape)
 
+print(x_test.shape)
+print(y_test.shape)
+# df_train = pd.DataFrame(x_train, columns = dataset.feature_names)
+# print(df_train.head())
+
+# df_test = pd.DataFrame(x_test, columns = dataset.feature_names)
+# print(df_test.head())
+# print(x_train)
+# print(y_train.shape)
+
+x_train = x_train.reshape(x_train.shape[0],2,2,2)
+x_test = x_test.reshape(x_test.shape[0],2,2,2)
+
 
 # 2. 모델
 model = Sequential()
-model.add(Dense(10, input_shape =(3,)))
-model.add(Dense(15, activation='relu'))
-model.add(Dense(20, activation='relu'))
-model.add(Dense(15, activation='relu'))
-model.add(Dense(10, activation='relu'))
-model.add(Dense(50, activation='relu'))
-model.add(Dense(1, activation='sigmoid'))
-
-model.summary()
-# 3. 학습
-model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['mse'])
-model.fit(x_train, y_train, batch_size=1, epochs=200, validation_split=0.2)
-
+model.add(Conv2D(32,(1,1), input_shape =(2,2,2)))
+model.add(Conv2D(64,(3,3), padding = 'same', activation = 'relu'))
+model.add(Dropout(0.2))
+model.add(Conv2D(128,(3,3), padding = 'same', activation = 'relu'))
+model.add(Dropout(0.2))
+model.add(Conv2D(64,(3,3), padding = 'same', activation = 'relu'))
+model.add(Dropout(0.2))
+model.add(Conv2D(32,(3,3), padding = 'same', activation = 'relu'))
+model.add(Dropout(0.2))
+model.add(Flatten())
+model.add(Dense(1))
 
 # 4. 예측
+model.compile(optimizer='adam', loss='mse', metrics=['mse'])
+model.fit(x_train, y_train, batch_size=1, epochs=20, validation_split=0.2)
 
-loss, mse = model.evaluate(x_test, y_test)
+loss, mse = model.evaluate(x_test, y_test,batch_size=1)
 
 y_predict = model.predict(x_test)
 
@@ -77,4 +95,3 @@ print("RMSE : ", RMSE(y_test, y_predict))
 from sklearn.metrics import r2_score
 r2 = r2_score(y_test, y_predict)
 print("R2 : ", r2)
-'''
