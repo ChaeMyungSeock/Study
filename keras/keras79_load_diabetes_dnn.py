@@ -6,9 +6,9 @@ from keras.layers import Flatten, MaxPooling2D, Dropout
 import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
 import numpy as np
-
+import pandas as pd
 '''
 # data      : x 값
 # target    : y 값
@@ -19,42 +19,53 @@ dataset = load_diabetes()
 x = dataset.data
 y = dataset.target
 
+df = pd.DataFrame(x, columns = dataset.feature_names)
+df['traget'] = y
+print(df.head())
+print(x)
+# print(y)
 print(x.shape)
 print(y.shape)
 
-print(x)
 print(y)
-
 
 scaler = StandardScaler()
 x = scaler.fit_transform(x)
 
-# pca = PCA(n_components=7)
-# pca.fit(x)
-# x = pca.transform(x)
+pca = PCA(n_components=10)
+pca.fit(x)
+x = pca.transform(x)
 
 x_train, x_test, y_train, y_test = train_test_split(x,y,random_state = 66, shuffle = True, test_size = 0.2)
+
+
 
 # y_train = np_utils.to_categorical(y_train)
 # y_test = np_utils.to_categorical(y_test)
 print(x_train.shape)
 print(y_train.shape)
 
+print(x_test.shape)
+print(y_test.shape)
+# df_train = pd.DataFrame(x_train, columns = dataset.feature_names)
+# print(df_train.head())
+
+# df_test = pd.DataFrame(x_test, columns = dataset.feature_names)
+# print(df_test.head())
+# print(x_train)
+# print(y_train.shape)
+
+
 
 # 2. 모델
 model = Sequential()
-model.add(Dense(1000, input_shape =(10,)))
-model.add(Dense(2000, activation='relu'))
-model.add(Dense(3000, activation='relu'))
+model.add(Dense(100, input_shape =(10,)))
 model.add(Dense(5000, activation='relu'))
-model.add(Dense(2000, activation='relu'))
-model.add(Dense(1000, activation='relu'))
-model.add(Dense(1, activation='sigmoid'))
-
+model.add(Dense(1,activation='relu'))
 model.summary()
 # 3. 학습
-model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['mse'])
-model.fit(x_train, y_train, batch_size=1, epochs=10, validation_split=0.2)
+model.compile(optimizer='adam', loss='mse', metrics=['mse'])
+model.fit(x_train, y_train, batch_size=1, epochs=100, validation_split=0.2)
 
 
 # 4. 예측
