@@ -1,0 +1,27 @@
+print(type(변수)) -> 타입명 확인
+print(x_train.__class__) => 해당 변수의 class확인 가능
+
+fit한 다음에 save는 가중치 저장 => 바로 결과값 출력!! 여기서 layer를 추가해주면 망함
+
+model 다음에 하는짓은 모델 layer 추가 + compile, fit
+
+save_weights => 같은 layer단의 가중치를 저장... => 그럼 가중치가 +인지 그냥 불러오는건지
+
+save, save_checkpoint => 모델 컴파일 fit까지 저장가능
+weight => fit 기능만 저장
+
+.npy 저장공간
+
+grid 전부 다 하는거
+
+랜덤 포레스트 => 몇가지만 뽑아서 하는거
+
+numpy는 한가지 자료형만 가능 => 그렇기 때문에 자료형에 유연한 pandas를 사용하자
+
+
+
+데이컨 결측치 data를 (간단한 dnn)predict으로 구하고 로브스타 스케일러도 이상치 제거 후
+모델링 ㄱㄱ
+
+rainbow csv , excel viewer
+
