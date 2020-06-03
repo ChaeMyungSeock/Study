@@ -1,0 +1,49 @@
+PCA와 Whitening 먼저 평균차감(Mean Subtraction) 기법
+
+
+흔히 하는 실수. 전처리 기법을 적용함에 있어서 명심해야 하는 중요한 사항은 전처리를 위한 여러 통계치들은 학습 데이터만 대상으로 추출하고 검증, 
+테스트 데이터에 적용해야 한다. 예를들어 평균차감(mena subtraction) 기법을 적용 할 때 흔히 하는 실수 중에 하나는 전체 데이터를 대상으로 평균차감 
+처리를 하고 이 데이터를 학습, 검증, 테스트 데이터로 나누어 사용하는 것이다. 올바른 방법은 학습, 검증, 테스트를 위한 데이터를 먼저 나눈 후에 학습
+ 데이터를 대상으로 평균값을 구한 후에 평균차감 전처리를 모든 데이터군(학습, 검증, 테스트)에 적용하는 것이다.
+
+scaler 6개정도 무조건 써야함 데이터의 분포를 모아서 확인 => 이상치에 좋은 거 로브스터 스케일링
+
+
+
+# concatenate 함수
+# Concatenate 클래스
+def split_x(seq, size):
+    aaa=[]
+    for i in range(len(seq) - size + 1):
+        subset = seq[i:(i+size)]
+        aaa.append([j for j in subset])
+    return np.array(aaa)
+
+size = 6 # 앞에 5개 x 뒤에 하나 y
+samsung = np.load('./data/samsung0603.npy', allow_pickle='True') 불러올 때 allow_pickle='True' 해줘야함 default로 false로 되어 있는데 True해줘야 함
+
+
+스케일러의 경우 데이터를 나누기전에 하지말고 나누고 난 이후에 train에 fit한 이후에 train validation test를 transform 해주는게 좋음 그래야 train범위에
+벗어난 경우도 생각해야하기 때문 
+
+# concatenate 함수
+# Concatenate 클래스  의 경우 layer를 병합하는 과정에서 클래스는 axis를 이용해서 데이터 폼을 변형할 수 있음 axis=0은 행 axis=1은 열을 기준으로
+데이터를 병합해줌
+
+y_predict1 = scaler.inverse_transform(y_predict)		 그 위에서 y값을 전체로 standardscaler와 pca를 통해 차원을 축소후에 train과 test로 나눴으므로
+print("y_pre : ", y_predict1)				 그에 대한 predict 또한 scaler된 값으로 나온다. 따라서 인버스트랜스폼 해줘야함
+
+# 두개의 앙상블을 할 때 가중치가 1:1로 나눠지기 때문에 데이터의 상관관계에 따라 결측치를 보강할지 잘라낼지 결정
+# 그래서 그냥 시가로만 판단하는것도 나쁘지 않은 방법, 그리고 하이트도 6월2일자를 다 잘라서 사용 or nan => 그 전날 값으로 대체
+
+# # Nan 제거
+# samsung = samsung.dropna(axis=0)       # axis = 0 행을 기준으로 => 확인해라 까먹는다 자꾸
+
+# hite = hite.fillna(method = 'bfill')   # fillna 값을 채워줌 , 전날값으로 채워주겠다 // 전날값과 큰 값 차이가 안나서
+# hite = hite.dropna(axis=0)
+
+# hite.iloc[0, 1:5] = [10,20,30,40]       # index loc = iloc 1~4까지 넣어주겠다
+hite.loc["2020-06-02", "고가":"거래량"] = ['100','200','300','400']     # 거래량까지 넣어주겠다
+
+
+
