@@ -1,0 +1,69 @@
+# 1차원 배열 계산의 예
+import numpy as np
+storages = np.array([1,2,3,4])
+storages += storages
+print(storages)
+
+
+# ndarray 사용시 주의사항
+
+arr1 = np.array([1,2,3,4,5])
+print(arr1)
+
+arr2 = arr1
+arr2[0] = 100
+
+# arr2 변수를 변경하면 변수 arr1도 영향을 받음
+print(arr1)
+
+# 변수를 그대로 다른 변수에 대입하면 원본 변수의 데이터 위치가 할당되어 겨로가적으로 원본 데이터와 동일해짐
+# 원본 데이터를 변영향을 안주면서 데이터를 사용하기 위해서는 arr2 = arr1.copy()를 사용하면 된다
+
+arr3 = arr1[:3]
+arr4 = arr1[3:5]
+print(arr3)
+print(arr4)
+
+# 부울 인덱스 참조
+'''
+부을 인덱스 참조란 []안에 논리값(True/False) 배열을 사용하여 요소를 추출하는 방법을 말함
+'arr[ndarray 논리값 배열]'로 표기하면 논리값(부울) 배열의 True에 해당하는 요소의 ndarray를
+만들어 반환해줍니다.
+'''
+arr = np.array([2,4,6,7])
+print(arr[np.array([True, True, true, False])])  # 2,4,6
+
+arr_index = np.array([2,3,4,5,6,7])
+
+print(arr %2 == 0)
+# [True, False, True, False, True, False]
+print(arr[arr %2 == 0])
+#[2,4,6]
+
+# 범용함수
+'''
+요소의 절대값 반환 : np.abs()
+요소의 e(자연 로그의 밑)의 거듭제곱을 반환 : np.exp()
+요소의 제곱근을 반환 : np.sqrt()
+요소의 합 : np.add()
+요소의 차 : np.subtract()
+요소의 최대값 반환 : np.maximum()
+'''
+
+# 집합함수
+'''
+1차원 배열만을 대상으로 함
+np.unique() : 배열 요소에서 중복을 제거하고 정렬한 결과를 반환하는 함수
+np.unionld(x,y) : 배열 x와 y의 합집합을 정렬해서 반환하는 함수
+np.intersectld(x,y) : 배열 x와 y의 교집합을 정렬해서 반환하는 함수
+np.setdiffld(x,y) : 배열 x에서 배열 y를 뺀 차집합을 정렬해서 반환하는 함수
+'''
+
+
+# 난수
+'''
+np.random(n)은 0이상 1미만의 난수를 n개만큼 생성
+np.random().randint(x,y,z) x이상 y미만의 정수를 z개를 생성, z의 경우 (2,3)의 인수를 넣을 수 있고 2x3 행렬을 생성
+np.random.normal() 가우스 분포를 따르는 난수를 생성
+'''
+
