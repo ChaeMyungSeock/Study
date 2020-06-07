@@ -1,0 +1,150 @@
+모델 튜님
+
+그리드 탐색
+-사이킷런의 GridSearchCV. 탐색하고자 하는 하이퍼파라미터와 시도해볼 값을 지정하기만 하면 됨, 그러면 가능한 모든
+하이퍼파라미터 조합에 대해 교차 검증을 사용해 평가하게 됩니다.
+
+from sklearn.model_selection import GridSearchCV
+ 
+param_grid = [
+        {'n_estimators': [3, 10, 30], 'max_features': [2, 4, 6, 8]},
+        {'bootstrap': [False], 'n_estimators': [3, 10], 'max_features': [2, 3, 4]},
+    ]
+forest_reg = RandomForestRegressor()
+ 
+grid_search = GridSearchCV(forest_reg, param_grid, cv=5,
+                           scoring='neg_mean_squared_error',
+                           return_train_score=True)
+ 
+grid_search.fit(housing_prepared, housing_labels)
+
+무작위 샘플링
+-무작위 샘플링에서 하이퍼 매개 변수 값은 정의된 검색 공간에서 임의로 선택됩니다. 무작위 샘플링 을 통해 검색 공간에
+ 불연속 및 연속 하이퍼 매개 변수를 모두 포함할 수 있습니다.
+
+
+from azureml.train.hyperdrive import RandomParameterSampling
+param_sampling = RandomParameterSampling( {
+        "learning_rate": normal(10, 3),
+        "keep_probability": uniform(0.05, 0.1),
+        "batch_size": choice(16, 32, 64, 128)
+    }
+)
+
+Bayesian 샘플링
+- Bayesian 샘플링 은 Bayesian 최적화 알고리즘을 기반으로 하며 하이퍼 매개 변수 값에 대 한 지능적인 선택이 다음 샘플까지 수행 합니다. 새 샘플이 보고된 기본 메트릭을 개선하기 위해 이전 샘플이 수행한 방법에 따라 이 샘플을 선택합니다.
+Bayesian 샘플링을 사용할 때 동시 실행 수는 조정 프로세스의 효율성에 영향을 줍니다. 병렬 처리 수준이 작으면 이전에 완료된 실행에서 활용하는 실행 수가 증가하므로 일반적으로 동시 실행 수가 적으면 더 나은 샘플링 수렴이 가능합니다.
+Bayesian 샘플링은 검색 choice공간 uniform에 대 quniform 한, 및 배포만 지원 합니다.
+
+
+ RandomizedSearchCV 그리드의 일부로써 정해준 파라미터 내에서 n_iter의 갯수만큼 랜덤하게 뽑아서 최적의 파라미터를 뽑아줌 그리드와 달리 단 하나의
+딕셔너리를 대입해줘야 하며, 그 범위 내에서 랜덤하게 수행한다. 설정해주지 않은 값은 디폴트값으로 설정되며 그 값을 유지함
+
+
+# ml
+
+# 모델은 한줄.. 파라미터 값으로 늘어남
+model = LinearSVC()
+
+acc = accuracy_score([0,0,0,1], y_predict) # 딥러닝에서 evalute 역활을 함
+
+머신러닝에서 해결하지 못하던 xor => from sklearn import svm 으로 해결  딥러닝에서는 히든레이어로 해결
+
+# model = LinearSVC()
+# model = SVC()
+model = KNeighborsClassifier(n_neighbors=1)
+# model = KNeighborsClassifier() 최근접에 이웃을 파라미터로 넣어줘야 함 (n의 갯수는 성능차이) // 최근접 이웃 알고리즘
+# 최근접 data의 선의 갯수 n_neighbors => n 데이터가 뭉쳐서 분류됨
+# n개 만큼 근처의 데이터를 뭉쳐줌
+
+# model = KNeighborsClassifier() 최근접에 이웃을 파라미터로 넣어줘야 함 (n의 갯수는 성능차이) // 최근접 이웃 알고리즘
+
+
+
+
+model = RandomForestRegressor()  # score : 0.96625, 알아서 파라미터 튜닝이 알아서 들어감
+# error : Classification metrics can't handle a mix of multiclass and continuous targets => accuracy_score 오류 (분류인데 회기 쓸 때)
+# model = LinearSVC() # acc = 0.8666
+# model = SVC() # acc = 0.9
+# model = KNeighborsClassifier(n_neighbors=2) # acc = 0.933 
+# model = RandomForestClassifier(n_estimators=100, oob_score=True, random_state=123456) # acc = 0.9
+# model = KNeighborsClassifier() 최근접에 이웃을 파라미터로 넣어줘야 함 (n의 갯수는 성능차이) // 최근접 이웃 알고리즘
+# 최근접 data의 선의 갯수 n_neighbors => n 데이터가 뭉쳐서 분류됨
+# model = KNeighborsRegressor()   # score : 0.976
+
+
+
+
+# scaler이후에 pca로 차원 축소에서 시간 확보 기준점 정확도 확보
+# feature important로 뽑은걸로 비교
+# 랜덤포레스트  = > 100개중에 5개 중요한거 뽑아줌
+# 중요한 feature를 다 다르게 보여줌 
+
+x_train, x_test, y_train, y_test = train_test_split(x,y, test_size = 0.2, random_state = 777)
+scaler = StandardScaler()
+scaler.fit(x_train)
+
+x_train = scaler.transform(x_train)
+x_test = scaler.transform(x_test) => x_train에서 핏한걸로 train, test를 transform하는 이유는 범위 밖을 상정하기 위해서
+
+# print(raw_data.isnull()) # nan값 확인
+
+y = raw_data["quality"] # data파라미터의 quality 칼럼을 불러옴
+
+
+count_data = wine.groupby('quality')['quality'].count()
+# 판다스의 groupy는 안에 칼럼을 그룹별로 묶어줌
+# quality칼럼안에 quality를 행별로 각개체가 얼마나 있는지 카운트해서 확인 
+
+allAlgorithms = all_estimators(type_filter = 'classifier')
+# all_estimators => sklearn의 모든 classifier가 있음
+
+# name, algorithm (변수명)으로 allAlgorithms이 반환값으로 반환함
+
+for (name, algroithm) in allAlgorithms:
+    model = algroithm()
+
+    model.fit(x_train, y_train)
+    y_pred = model.predict(x_test)
+    print(name, "의 정답률 = ", accuracy_score(y_test, y_pred))
+# 26개의 모델을 한번에 돌림
+
+
+x = boston.iloc[:, 0:13] # 판다스에서 슬라이스 iloc 위치를 알고 있으면 됨  // loc 헤더와 인덱스 알고 있어야 함
+y = boston.iloc[:,13]
+
+
+kfold = KFold(n_splits=5, shuffle=True, random_state=666) 
+n_splits=5 20%씩 test로 80% train 데이터로 나눠서 총 5번 검증 즉 모든 데이터를 test data로 활용
+
+parameters = [
+    {"C":[1,10,100,1000], "kernel":["linear"]},
+    {"C":[1,10,100,1000], "kernel":["rbf"], "gamma":[0.001, 0.0001]},
+    {"C":[1,10,100,1000], "kernel":["sigmoid"], "gamma":[0.001, 0.0001]}
+]
+# 그리드 파라미터 사용.. 
+# C : 1 kernel : lienear, C : 10 kernel : lienear, C : 100 kernel : lienear, C : 1000 kernel : lienear
+
+kfold = KFold(n_splits=5, shuffle=True)
+model = GridSearchCV(SVC(), parameters, cv=kfold)
+# CV : cross validation
+# 처음에 진짜 모델, 2번째 parameters, 3번째 kfold
+
+
+
+
+parameters = {"n_estimators":[10,100,1000], 'max_features' : [2,4,6], 'max_depth' : [4,4,4]}
+    # {'bootstrap':[False],"n_estimators":[3,10], 'max_features':[2,3,4]}
+
+
+kfold = KFold(n_splits=2, shuffle=True)
+model = RandomizedSearchCV(RandomForestClassifier(), parameters, cv=kfold, n_jobs=-1)
+랜덤 서치 그리드 서치의 일종으로 파라미터가 하나만 있으면 됨 파라미터 안의 값을 랜덤으로 돌리면서 최적의 파라미터값을 찾음
+
+'''
+n_estimator : 결정 트리의 개수, default 값은 10, 많을 수록 좋은 성능이 나올 수 도 있지만, 무조건적인것은 아님
+max_features : 데이터의 feature를 참조할 비율, 개수를 뜻함. default는 auto
+max_depth : 트리의 깊이를 뜻합니다.
+min_samples_leaf : 리프노드가 되기 위한 최소한의 샘플 데이터 수
+min_samples_split : 노드를 분할하기 위한 최소한의 데이터 수
+'''
