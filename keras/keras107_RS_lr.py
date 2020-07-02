@@ -32,7 +32,7 @@ print(y_test.shape)                 # (10000, 10)
 
 
 # 2. 모델링
-def build_model(drop = 0.5, optimizer = 'adam'):
+def build_model(drop, optimizer, learning_rate):
     inputs = Input(shape = (28, 28), name = 'input')
     x = LSTM(64, activation = 'relu', return_sequences = True, name = 'hidden1')(inputs)
     x = Dropout(drop)(x)
@@ -42,17 +42,22 @@ def build_model(drop = 0.5, optimizer = 'adam'):
     x = Dropout(drop)(x)
     outputs = Dense(10, activation = 'softmax', name = 'output')(x)
     model = Model(inputs = inputs, outputs = outputs)
-    model.compile(optimizer = optimizer, metrics = ['accuracy'],
+    model.compile(optimizer = optimizer(learning_rate=learning_rate), metrics = ['accuracy'],
                   loss = 'categorical_crossentropy')
     return model
+    
+from keras.optimizers import Adam, RMSprop, SGD, Adadelta,Adagrad, Nadam, Adamax
 
 def create_hyperparameter():
     batches = [10, 20, 30, 40, 50]
-    optimizers = ['rmsprop', 'adam', 'adadelta']
-    dropout = np.linspace(0.1, 0.5, 5)
+    optimizers = [RMSprop, Adam, Adadelta]
+    dropout = np.linspace(0.1, 0.5, 5).tolist()
+    learning_rate = np.linspace(0.001, 0.01, 10).tolist()
+
     return {'batch_size': batches,
             'optimizer': optimizers,
-            'drop': dropout}
+            'drop': dropout,
+            'learning_rate':learning_rate}
 
 # KerasClassifier 모델 구성하기
 model = KerasClassifier(build_fn = build_model, verbose = 1)
@@ -68,3 +73,23 @@ search.fit(x_train, y_train)
 score = search.score(x_test, y_test)
 print(search.best_params_)              # {'optimizer': 'adadelta', 'drop': 0.2, 'batch_size': 20}
 print("score : ", score)                # 0.9661999940872192
+
+def sum_of_squares(v):
+    return sum(v_i**2 for v_i in v)
+# 실수 벡터를 입력하면 요소의 제곱으ㅢ 합을 리턴해주는 비용함수
+
+def difference_quotient(f,x,h):
+    return (f(x+h) - f(x))/h
+
+# f라는 함수에 대해서 x위치에서의 미분값 즉 기울기를 리턴함
+# x가 lr의 역활을 수행 => 최소 기울기를 찾아가자
+
+
+def partial_difference_quotient(f, v, i, h):
+# 함수 f의 i번째 편도함수가 v에서 가지는 값
+
+    w = [v_j + (h if j == i else 0) # h를 v의 i번째 변수에서만 더해주자
+        for j, v_j  in enumerate(v)] # 즉 i 번째 변수만 변화할 경우
+    
+    return (f(w) - f(v))/h
+

@@ -1,92 +1,115 @@
-#keras42_lstm_split2.py
+# keras42_lstm_split2.py
 
 import numpy as np
-from keras.models import Sequential
-from keras.layers import Dense, LSTM
+from keras.models import Sequential, Model
+from keras.layers import Dense, LSTM, Input, Conv1D, Dropout
+from keras.callbacks import EarlyStopping
 from sklearn.model_selection import train_test_split
+es = EarlyStopping(monitor = 'loss', mode = 'auto', patience = 10)
+
 # 1. 데이터
+a = np.array(range(1, 101))
+size = 5            # timesteps = 4
+print("=" * 40)
+print(a.shape)
 
-a = np.array(range(1,101 ))
-print(a)
-size = 5                    # time_steps = 5
+# LSTM 모델을 완성하시오
 
-def split_x (x_list, size):
-    x_list = []
-    for i in range(len(a) - size +1 ):
-        xset = a[i:size+i]
-        x_list.append(xset)
-    return np.array(x_list)
+# 1-1. 데이터 분할
+# 1-1-1. split_x 함수 정의
+def split_x(seq, size):
+    aaa = []
+    for i in range(len(a) - size + 1):
+        subset = a[i : (i + size)]
+        # aaa.append([item for item in subset])
+        aaa.append(subset)
+    print(type(aaa))
+    return np.array(aaa)
 
-# def split_y (y_list, size):
-#     y_list = []
-#     for j in range(len(a) - size ):
-#         yset = a[size + j]
-#         y_list.append(yset)
-#     return np.array(y_list)
+# 1-2. 데이터 a를 분할 후 x와 y로 분할하기
+# 실습1. train, test로 분리할 것 (8:2)
+# 실습2. 마지막 6행을 predict로 만들고 싶다
+# 실습3. validation을 넣을 것 (train의 20%)
+data = split_x(a, size)
+print(data)
 
-# data_x = split_x(a,5)
-# data_y = split_y(a,5)
+# 1-2-1. predict 데이터 분할
+predict = data[90: , :4]
+print(predict)
 
-# print(data_x.shape)
-# print(data_y.shape)
+predict = predict.reshape(6, 4, 1)
+print(predict.shape)
 
-# print(data_x)
-# print(data_y)
+# 1-2-2. train, test 데이터 분할
+x = data[:90, :4]
+y = data[:90, -1:]
+print(x)
+print(x.shape)
+print(y)
+print(y.shape)
 
+x = x.reshape(90, 4, 1)
+print(x.shape)
 
-# data_x = data_x.reshape(data_x.shape[0],data_x.shape[1],1)
+x_train, x_test, y_train, y_test = train_test_split(
+    x, y, test_size = 0.2, shuffle = True,
+    random_state = 1234)
 
-dataset = split_x(a, size)      #(6,5)
-print(dataset)
-
-x1 = dataset[:, 0:4]
-y1 = dataset[:, 4]
-# x1_predict = x1[90:96 ]
-# x_train = x1[0:90]
-# # y_predict = y1[90:96 ]
-# y_train = y1[0:90]
-
-
-# x1 = x1.reshape(x1.shape[0], x1.shape[1],1)
-# x1 = np.reshape(x1, (6,4,1))
-# print(x_train.shape)
-
-# 실습 1. train, test 분리
-# 실습 2. 마지막 6개의 행을 predict로 만들고 싶다
-# 실습 3. validation을 넣을 것 (train의 20%)
-
-x1_train,x1_predict ,y1_train, y1_predict = train_test_split(x1, y1,shuffle = True, train_size=90/96, random_state = 66 )
-
-
-x1_train = x1_train.reshape(x1_train.shape[0], x1_train.shape[1],1)
-x1_predict = x1_predict.reshape(x1_predict.shape[0], x1_predict.shape[1],1)
+print(x_train.shape)
+print(x_test.shape)
+print(y_train)
+print(y_test)
 
 
-
-# LSTM 모델을 만드시오.
-# 2. 모델
+# 2. 모델 구성
 model = Sequential()
-model.add(LSTM(10,input_shape = (4,1)))
-model.add(Dense(500))
-model.add(Dense(1))
+model.add(Conv1D(140, 2, input_shape = (4, 1)))
+# model.add(Conv1D(16, 2, activation = 'relu'))
+model.add(Dropout(rate = 0.2))
+model.add(Dense(1, activation = 'relu'))
+
 model.summary()
 
 
-# 3. 실행
-from keras.callbacks import EarlyStopping
-earlystopping = EarlyStopping(monitor='loss', patience=10, mode='min')
-model.compile(optimizer = 'adam', loss = 'mse', metrics=['mse'])
-model.fit(x1_train, y1_train, validation_split=0.2 ,epochs=1000, callbacks=[earlystopping], batch_size=1, verbose=1)
+'''
+# 3. 실행 및 훈련
+model.compile(loss = 'mse', metrics = ['mse'], optimizer = 'adam')
+model.fit(x_train, y_train, epochs = 1000,
+          batch_size = 1, verbose = 1,
+          callbacks = [es], validation_split = 0.25,
+          shuffle = True)
 
-# 4. 평가, 예측
-loss, mse = model.evaluate(x1_train, y1_train, batch_size=1)
 
+# 4. 평가 및 예측
+loss, mse = model.evaluate(x_test, y_test)
 print("loss : ", loss)
 print("mse : ", mse)
 
+y_predict = model.predict(predict, batch_size = 1)
+print("=" * 40)
+print("y_predict : \n", y_predict)
+print(y_predict.shape)
+'''
 
-x = model.predict(x1_predict)
-print("predict : ",x)
-print(y1_predict)
+'''
+Result 1)
+loss :  0.2082972996764713
+mse  :  0.20829731225967407
 
 
+Result 2)
+loss :  1.17920982837677
+mse  :  1.17920982837677
+
+
+Result 3)
+loss :  0.008472939021885395
+mse  :  0.008472939021885395
+y_predict :
+ [[94.94735 ]
+  [95.95467 ]
+  [96.96222 ]
+  [97.96997 ]
+  [98.977905]
+  [99.98599 ]]
+'''
