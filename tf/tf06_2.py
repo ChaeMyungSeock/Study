@@ -32,7 +32,7 @@ cost = tf.reduce_mean(tf.square(hypothesis - y_train)) # mse : mean squared erro
 
 
 
-train = tf.compat.v1.train.GradientDescentOptimizer(learning_rate=  0.01).minimize(cost)
+train = tf.compat.v1.train.GradientDescentOptimizer(learning_rate=0.12).minimize(cost)
 # optimizer => 최족화 경사하강법 adam
 
 with tf.compat.v1.Session() as sess:
@@ -53,3 +53,12 @@ with tf.compat.v1.Session() as sess:
 
     # predict해보자
     print("예측 : ", sess.run(hypothesis, feed_dict ={x_train:x_test_data}))
+
+
+'''
+lr = 0.1 step = 540 /////// lr 0.12 step = 460
+
+lr = 0.001 step = 20000 1.1022381e-05 [1.9961436] [1.0087627] 아모르직다 수렴중
+
+lr = 1 step = 20 inf [1.7777886e+21] [7.8205226e+20] 무한대로 뻗침(error가 cost가)
+'''
