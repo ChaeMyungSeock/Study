@@ -1,0 +1,13 @@
+
+
+1. cmd창들어간다
+2. conda create -n tf114 python=3.6.5 anaconda
+3. conda activate tf114(자신이 정한 이름) => (tf114) 이렇게 나와야 함
+4.  - conda upgrade wrapt	
+    - conda update wrapt
+    - conda remove wrapt
+    3개중에 하나 이용
+4-1 pip install tensorflow==1.14
+
+5. 넘파이 워닝 잡으려고 pip uninstall numpy => pip install numpy==1.16.4
+6. 가상환경에서 python => import tensorflow as tf => print(tf.__version__) => 1.14.0 나오면 완료
