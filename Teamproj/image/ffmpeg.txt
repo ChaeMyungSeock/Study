@@ -1,0 +1,23 @@
+$> ffmpeg -ss [시간] -i [파일명] -y -vframes 1 -an -s [사이즈] [이미지 파일 이름]
+
+
+
+출처: https://yujuwon.tistory.com/entry/ffmpeg에서-이미지-추출하기 [Ju Factory]
+
+
+ffmpeg -i 1080.mp4 -an -r 1 -y -s 360x360 output%d.jpg
+
+출처: https://storyjava.tistory.com/210 [Research and Development by SuperKev]
+
+
+-an : 오디오 무시
+
+-r 1 : 매 1초마다 
+
+-y : 같은파일 이름이 있을 시 덮어쓰기
+
+-s : 결과이미지 크기 지정
+
+
+
+출처: https://storyjava.tistory.com/210 [Research and Development by SuperKev]
