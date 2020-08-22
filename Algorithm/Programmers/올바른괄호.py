@@ -11,3 +11,17 @@ def solution(s):
         return True
     else:
         return False
+
+
+
+s = "()()"
+print(solution(s))
+
+
+s = "(())()"
+print(solution(s))
+
+
+
+s = ")()("
+print(solution(s))
