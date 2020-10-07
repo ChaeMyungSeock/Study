@@ -5,27 +5,33 @@ import xml.etree.ElementTree as ET
 from xml.etree.ElementTree import Element, dump, ElementTree
 import matplotlib.pyplot as plt
 
-# caltech_dir = '/data/mask/data/within_mask'
-# caltech_dir1 = '/data/mask/data/without_mask'
-caltech_dir1 = '/home/john/Study/pytorch_retinaface/sg_maskdata/test/data/withoutmask'
+# path
+caltech_dir1 = '/home/ubuntu/data/mask/test/within_mask'
+caltech_dir2 = '/home/ubuntu/data/mask/test/without_mask'
 
-files = glob.glob(caltech_dir1+"/*.*")
-# #
-# label = open('/home/john/Study/efficientnet/data/label.txt', 'a')
+# dataloder
+files1 = glob.glob(caltech_dir1+"/*.*")
+files2 = glob.glob(caltech_dir2+"/*.*")
 
-# label = open('/home/john/Study/pytorch_retinaface/facedetect/target_mask/train_label.txt', 'a')
-label = open('/home/john/Study/pytorch_retinaface/sg_maskdata/test/data/label/with.txt', 'a')
-# #
-#
-print(len(files))
-for i in files:
-    label.write('1\n')
-# #
-#
-#
-# label.close()
+# labelfile create
+# label1 = open('/home/ubuntu/data/mask/label/mask_test_label.txt', 'w')
 
-# label = open('/home/john/Study/mask/test_label.txt', 'a')
+# label data insert
+label1 = open('/home/ubuntu/data/mask/label/mask_test_label.txt', 'a')
+
+print(len(files1))
+print(len(files2))
+
+for i in files1:
+    label1.write('1\n')
+
+for i in files2:
+    label1.write('0\n')
+
+#
+
+
+
 #
 # # (300, 224, 224, 3) => mask on => 1
 # # (282, 224, 224, 3) => mask off => 0
@@ -35,4 +41,6 @@ for i in files:
 #
 #
 #
-label.close()
+
+label1.close()
+
